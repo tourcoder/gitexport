@@ -41,15 +41,29 @@ gitexport_help() {
   echo
   echo "Usage: gitexport [OPTION]..."
   echo "Options:"
+  echo "  -t, --to            Export the files and folders, exclude .git"
   echo "  -h, --help          Show help information"
   echo "  -v, --version       Show Gitexport version"
   echo "  -u, --upgrade       Upgrade Gitexport to latest version"
   echo
 }
 
+gitexport_to() {
+    local time=$(date +%m%d%H%M%S)
+    if [ ! -d "$HOME/Desktop/gitexport_$time" ]; then
+        mkdir -p "$HOME/Desktop/gitexport_$time"
+    fi
+    cp -r $(ls -A | egrep -v '(.git)') "$HOME/Desktop/gitexport_$time"
+    echo "Export success"
+}
+
 main(){
   if  [[ $(command -v gitexport) ]]; then
     case $1 in
+      -t|--to)
+        gitexport_to
+        exit 0
+        ;;
       -h|--help)
         gitexport_help
         exit 0
@@ -63,7 +77,7 @@ main(){
         exit 0
         ;;
       *)
-        echo "Unknown option: $1"
+        echo "Unknown command"
         exit 1
         ;;
     esac
