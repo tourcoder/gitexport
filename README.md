@@ -16,7 +16,16 @@ curl https://raw.githubusercontent.com/huabin/gitexport/master/gitexport | bash
 
 ### How to use
 
-Run command `gitexport` in the root directory of the project.
+Run command in the root directory of the project.
+
+```
+Usage: gitexport [OPTION]...
+Options:
+  -t, --to           Export the files without .git
+  -h, --help         Show help information
+  -v, --version      Show Gitexport version
+  -u, --upgrade      Upgrade Gitexport to latest version
+```
 
 The exported content will be generated on your Desktop in a folder named `gitexport`.
 
