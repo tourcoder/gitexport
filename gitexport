@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+#
+# Golang Latest Version Manager
+# Should work on sh, dash, bash, ksh, zsh
+#
+# Copyright (C) 2022-present, Implemented by Bin Hua <bin.tourcoder.com>
+
+gitexport_version() {
+  echo "v0.0.1"
+}
+
+gitexport_remote_version() {
+  curl -s "https://api.github.com/repos/huabin/gitexport/releases" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | awk 'NR==1'
+}
+
+gitexport_version_local() {
+  gitexport --version
+}
+
+opt_gitexport() {
+  if [[ $(gitexport_version_local) == $(gitexport_remote_version) ]]; then
+    gitexport_help
+  else
+    echo "Gitexport Local version: $(gitexport_version)"
+    echo "Gitexport Latest version: $(gitexport_remote_version)"
+    read -p "Do you want to update? (y/N): " answer
+    if [[ "${answer}" == "Y" ]] || [[ "${answer}" == "y" ]] || [[ "${answer}" == "" ]]; then
+      echo "Updating..."
+      sudo curl -sL https://raw.githubusercontent.com/huabin/gitexport/master/gitexport -o /usr/local/bin/gitexport
+      sudo chmod +x /usr/local/bin/gitexport
+      echo -e "gitexport updated..." && exit 0
+    else
+      echo -e "gitexport update cancelled" && exit 1
+    fi
+  fi
+}
+
+gitexport_help() {
+  echo
+  echo "Gitexport Latest Version Manager ($(gitexport_version))"
+  echo
+  echo "Usage: gitexport [OPTION]..."
+  echo "Options:"
+  echo "  -h, --help          Show help information"
+  echo "  -v, --version       Show Gitexport version"
+  echo "  -u, --upgrade       Upgrade Gitexport to latest version"
+  echo
+}
+
+main(){
+  if  [[ $(command -v gitexport) ]]; then
+    case $1 in
+      -h|--help)
+        gitexport_help
+        exit 0
+        ;;
+      -v|--version)
+        echo $(gitexport_version)
+        exit 0
+        ;;
+      -u|--upgrade)
+        opt_gitexport
+        exit 0
+        ;;
+      *)
+        echo "Unknown option: $1"
+        exit 1
+        ;;
+    esac
+  else
+    sudo curl -sL https://raw.githubusercontent.com/huabin/gitexport/master/gitexport -o /usr/local/bin/gitexport
+    sudo chmod +x /usr/local/bin/gitexport
+    echo "gitexport installed, just run 'gitexport --help'" && exit 1
+  fi
+}
+
+main $1
