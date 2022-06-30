@@ -2,6 +2,8 @@
 
 Exporting content that does not contain .git 
 
+Hope there will be a native `git export` feature like this.
+
 ### Intro
 
 `gitexport` is a simple bash script to export content that does not contain .git.
