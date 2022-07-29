@@ -13,7 +13,7 @@ Recently, I need to upload a project without a .git file to another place (E.g. 
 ### Install
 
 ```
-curl https://raw.githubusercontent.com/huabin/gitexport/master/gitexport | bash
+curl https://raw.githubusercontent.com/tourcoder/gitexport/master/gitexport | bash
 ```
 
 ### How to use
